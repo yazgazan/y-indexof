@@ -1,0 +1,22 @@
+
+package commands
+
+const (
+  M_yindexof_help = "y-indexof is a simple yet modular indexof server"
+  M_version_help = "Print programm version"
+  M_init_help = "Init the layout in the current directory"
+  M_init_local_help = "Use a local init.tar"
+  M_init_file_help = "Path to init.tar (for local and download)"
+  M_init_url_help = "Where to download init.tar from"
+  M_init_dest_help = "Where to extract init.tar"
+  M_start_listen_help = "Port to listen (override config port)"
+  M_start_dir_help = "Directory containing the configurations and files"
+
+  M_init_local_default = false
+  M_init_file_default = "/tmp/init.tar"
+  M_init_url_default = "http://yazou.org/init.tar"
+  M_init_dest_default = "."
+  M_start_listen_default = ""
+  M_start_dir_default = "."
+)
+
