@@ -1,6 +1,6 @@
 
 NAME=		"../init.tar"
-FILES=		$(shell find . -depth 1)
+FILES=		$(shell find . -maxdepth 1)
 
 all:		tar
 

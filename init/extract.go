@@ -44,21 +44,23 @@ func Extract(filename string, dest string) error {
     fullPath := path.Join(dest, header.Name)
     mode := header.FileInfo().Mode()
 
-    fmt.Println(header.Name)
+    fmt.Println("Extracting", header.Name, "...")
     if mode.IsDir() {
-      fmt.Printf("Extracting %s ...\n", header.Name)
       err = extractDir(fullPath, mode)
       if err != nil {
         return err
       }
     } else if mode.IsRegular() {
-      fmt.Printf("Extracting %s ...\n", header.Name)
       err = extractFile(fullPath, mode, tr)
       if err != nil {
         return err
       }
+    } else if header.Typeflag == tar.TypeLink {
+      continue // TODO : see what it is for ...
     } else {
-      fmt.Printf("Don't know how to extract %s.\n", header.Name)
+      fmt.Println("Don't know how to extract", header.Name)
+      fmt.Println("File Type :", header.Typeflag)
+      fmt.Println("Report the error (with file type) to yazgazan@gmail.com")
     }
   }
   err = file.Close()

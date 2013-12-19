@@ -1,7 +1,7 @@
 
 NAME=		y-indexof
 
-MAKE=		gmake
+MAKE=		make
 RM=		rm -vf
 
 INITDIR=	init_base

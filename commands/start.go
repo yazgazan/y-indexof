@@ -2,10 +2,11 @@
 package commands
 
 import (
-  /* "github.com/yazgazan/y-indexof/start" */
+  "github.com/yazgazan/y-indexof/start"
   "github.com/spf13/cobra"
 
   "fmt"
+  "os"
 )
 
 type StartParams struct{
@@ -14,8 +15,27 @@ type StartParams struct{
 }
 
 func Start(cmd *cobra.Command, args []string, params StartParams) {
-  fmt.Println("Starting ...");
-  fmt.Println(params.Listen)
-  fmt.Println(params.Dir)
+
+  // move to Dir
+  err := os.Chdir(params.Dir)
+  if err != nil {
+    fmt.Println("Failed to start, couldn't cd into", params.Dir)
+    return
+  }
+
+  // read config
+  conf, err := start.ReadConfig(start.Config_file_name)
+  if err != nil {
+    fmt.Println("Failed to start, couldn't load config")
+    return
+  }
+
+  // overriding config if needed
+  if params.Listen != "" {
+    conf.Listen = params.Listen
+  }
+
+  // start server
+  start.Start(*conf)
 }
 

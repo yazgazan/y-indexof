@@ -4,9 +4,15 @@ BASEDIR="init_base"
 
 rm -rvf "$TESTDIR"
 mkdir -p "$TESTDIR"
-cd "$TESTDIR"
-y-indexof init
-cd -
-diff "$TESTDIR" "$BASEDIR"
 
+# Testing init ...
+cd "$TESTDIR"
+y-indexof init -f ../init.tar -l
+cd -
+diff -r "$TESTDIR" "$BASEDIR"
+
+# Testing start ...
+cd "$TESTDIR"
+y-indexof start
+cd -
 
