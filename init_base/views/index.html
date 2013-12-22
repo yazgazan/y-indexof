@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ddl.yazou.org - {{Path}}</title>
+  <script type="text/javascript">
+    var context = {{{JsonContext}}};
+  </script>
+</head>
+<body>
+  <h1>ddl.yazou.org - {{Path}}</h1>
+  <hr/>
+  <table>
+    <tr>
+      <td>
+        <a href="..">..</a>
+      </td>
+      <td>
+        sort
+      </td>
+    </tr>
+    {{#Files}}
+    <tr>
+      <td>
+        <img src="{{#Type}}{{Image}}{{/Type}}"/>
+      </td>
+      <td>
+        <a href="{{DownloadPath}}">
+          {{Name}}{{#IsDir}}/{{/IsDir}}
+        </a>
+      </td>
+      <td>
+        {{ModTime}}
+      </td>
+      <td>
+        {{#IsDir}}
+          -
+        {{/IsDir}}
+        {{^IsDir}}
+          {{HumanSize}}
+        {{/IsDir}}
+      </td>
+    </tr>
+    {{/Files}}
+  </table>
+  <hr/>
+</body>
+</html>

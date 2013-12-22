@@ -30,7 +30,7 @@ func Start(conf Config) error {
 
     method = GetMethodFromCache(req, cache)
 
-    if method == nil {
+    if method == nil || true {
       method, err = GetMethod(w, req, conf)
       if err != nil {
         HandleError(w, err)
@@ -41,7 +41,7 @@ func Start(conf Config) error {
       fmt.Println("from cache :D")
     }
     fmt.Printf("%+v\n", method)
-    err = HandleMethod(w, req, method)
+    err = HandleMethod(w, req, method, conf)
     if err != nil {
       HandleError(w, err)
     }

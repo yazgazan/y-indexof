@@ -14,9 +14,15 @@ const (
   // Methodes types
   Method_Unknown =  iota
   Method_Static =   iota // serving file
-  Method_Forward =  iota // forwarding request
   Method_Index =    iota // serving dir
   Method_Internal = iota // serving internal files (images, css, js ...)
+)
+
+const (
+  // Responses types
+  Response_html = iota // use the view to render html index
+  Response_json = iota // respond a json listing - TODO Later
+  // more to come ...
 )
 
 type Method struct{
@@ -24,15 +30,42 @@ type Method struct{
   MethodId  int // see Methodes types
   FullPath  string // e.g localhost:1243
   View      string // in case of Method_index
+  ResType   int // see Response types
+  Type      Type // type config
 }
 
 func (m *Method) FromDirConf(dirConf DirConfig, config Config) {
-  m.MethodId = dirConf.MethodId
   m.View = dirConf.View
-  if m.MethodId == Method_Forward {
-    m.FullPath = dirConf.Forward
+  m.FullPath = path.Join(config.Root, m.Path)
+}
+
+func (m *Method) ResolveType(config Config) {
+  allType, ok := config.Types["All"]
+  if ok == true {
+    m.Type = allType
+  }
+  if m.MethodId == Method_Index {
+    _type, ok := config.Types["Folder"]
+    if ok == true {
+      m.Type.Merge(_type)
+    }
   } else {
-    m.FullPath = path.Join(config.Root, m.Path)
+    defaultType, ok := config.Types["Default"]
+    if ok == true {
+      m.Type.Merge(defaultType)
+    }
+    ext := path.Ext(m.Path)
+    if ext == "" {
+      return
+    }
+    for _, curType := range config.Types {
+      for _, typeExt := range curType.Exts {
+        if typeExt == ext {
+          m.Type.Merge(curType)
+          return
+        }
+      }
+    }
   }
 }
 
@@ -56,11 +89,9 @@ func ConstructDirconfPath(config Config, urlPath string) string {
 
 func ConstructDirConfig(urlPath string, config Config) *DirConfig {
   var conf *DirConfig
+
   dir, file := path.Split(urlPath)
-  if file == "" {
-    return MakeDirConfig(config)
-  }
-  if dir != "" && dir != "/" {
+  if dir != "/" && file != ""{
     conf = ConstructDirConfig(dir, config)
   } else {
     conf = MakeDirConfig(config)
@@ -70,16 +101,6 @@ func ConstructDirConfig(urlPath string, config Config) *DirConfig {
   if err != nil {
     return conf
   }
-  if conf.MethodId == Method_Forward {
-    return conf
-  }
-  if newConf.MethodId != Method_Unknown {
-    conf.Method = newConf.Method
-    conf.MethodId = newConf.MethodId
-  }
-  if newConf.Forward != "" {
-    conf.Forward = newConf.Forward
-  }
   if newConf.View != "" {
     conf.View = newConf.View
   }
@@ -88,10 +109,8 @@ func ConstructDirConfig(urlPath string, config Config) *DirConfig {
 
 func MakeMethod() *Method {
   return &Method{
-    "",
-    Method_Unknown,
-    "",
-    "",
+    MethodId: Method_Unknown,
+    ResType: Response_html,
   }
 }
 
@@ -117,22 +136,22 @@ func GetMethod(
     method.FromDirConf(*dirConf, config)
   }
 
-  if method.MethodId == Method_Forward {
-    return method, nil
-  }
-
   infos, err := os.Stat(method.FullPath)
   if err != nil {
     return nil, MakeError404()
   }
 
-  if infos.Mode().IsDir() == true {
+  if infos.Mode().IsDir() == true && match == false {
     method.MethodId = Method_Index
   } else if infos.Mode().IsRegular() == true {
     method.MethodId = Method_Static
+  } else if match == true {
+    return nil, MakeError403()
   } else {
     return nil, MakeError500("unknown file mode")
   }
+
+  method.ResolveType(config)
 
   return method, nil
 }

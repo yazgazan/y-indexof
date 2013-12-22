@@ -7,6 +7,7 @@ const (
   default_views = "views"
   default_indexView = "index.html"
   default_static = "static"
+  default_download_prefix = ""
 )
 
 const (

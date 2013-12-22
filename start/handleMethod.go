@@ -5,23 +5,19 @@ import (
   "net/http"
 )
 
-func HandleStatic(w http.ResponseWriter, req *http.Request, method *Method) error {
-  http.ServeFile(w, req, method.FullPath)
-  return nil
-}
-
-func HandleMethod(w http.ResponseWriter, req *http.Request, method *Method) error {
+func HandleMethod(
+  w http.ResponseWriter,
+  req *http.Request,
+  method *Method,
+  config Config,) error {
   if method.MethodId == Method_Static {
-    return HandleStatic(w, req, method)
+    return HandleStatic(w, req, method, config)
   }
   if method.MethodId == Method_Internal {
-    return HandleStatic(w, req, method)
-  }
-  if method.MethodId == Method_Forward {
-    return MakeError(501, "fake error forward")
+    return HandleStatic(w, req, method, config)
   }
   if method.MethodId == Method_Index {
-    return MakeError(501, "fake error index")
+    return HandleIndex(w, req, method, config)
   }
   return MakeError(501, "fake error")
 }

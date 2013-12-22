@@ -7,21 +7,50 @@ import (
   "io/ioutil"
 )
 
+type TypeHeader struct{
+  Key     string
+  Value   string
+  Values  []string
+}
+
+type Type struct{
+  Exts        []string
+  Image       string
+  Headers     map[string][]string
+}
+
+func (base *Type) Merge(extend Type) {
+  if len(extend.Image) != 0 {
+    base.Image = extend.Image
+  }
+  if len(extend.Exts) != 0 {
+    base.Exts = extend.Exts
+  }
+  if len(extend.Headers) != 0 {
+    for key, values := range extend.Headers {
+      base.Headers[key] = values
+    }
+  }
+}
+
 type Config struct{
-  Listen      string
-  Root        string
-  Views       string
-  IndexView   string
-  Static      string
+  Listen          string
+  Root            string
+  Views           string
+  IndexView       string
+  Static          string
+  DownloadPrefix  string
+  Types           map[string]Type
 }
 
 func MakeConfig() *Config {
   return &Config{
-    default_listen,
-    default_root,
-    default_views,
-    default_indexView,
-    default_static,
+    Listen: default_listen,
+    Root: default_root,
+    Views: default_views,
+    IndexView: default_indexView,
+    Static: default_static,
+    DownloadPrefix: default_download_prefix,
   }
 }
 

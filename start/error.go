@@ -29,3 +29,7 @@ func MakeError404() *Error {
   return MakeError(404, "File not found")
 }
 
+func MakeError403() *Error {
+  return MakeError(404, "Access Forbiden")
+}
+
