@@ -1,0 +1,30 @@
+
+body {
+  font-family: monospace;
+}
+
+tr {
+  height: 5px;
+  padding: 0;
+  margin: 0;
+}
+
+td.filename {
+  min-width: 250px;
+}
+
+td.filename a {
+  text-decoration: none;
+}
+
+tr:hover td.filename a {
+  text-decoration: underline;
+}
+
+tr:hover {
+  color: grey;
+}
+
+td.space {
+  width: 20px;
+}

@@ -17,6 +17,7 @@ func HandleIndex(
 
   var context IndexContext
 
+  context.InitSort(req)
   context.InitContext(method, config)
   view := path.Join(config.Views, method.View)
   res := mustache.RenderFile(view, context)

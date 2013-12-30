@@ -27,6 +27,9 @@ func (base *Type) Merge(extend Type) {
     base.Exts = extend.Exts
   }
   if len(extend.Headers) != 0 {
+    if len(base.Headers) == 0 {
+      base.Headers = make(map[string][]string)
+    }
     for key, values := range extend.Headers {
       base.Headers[key] = values
     }
@@ -41,6 +44,7 @@ type Config struct{
   Static          string
   DownloadPrefix  string
   Types           map[string]Type
+  UserDefined     map[string]string
 }
 
 func MakeConfig() *Config {

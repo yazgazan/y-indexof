@@ -6,17 +6,37 @@
   <script type="text/javascript">
     var context = {{{JsonContext}}};
   </script>
+  <script type="text/javascript" src="/_/javascript/main.js"></script>
+  <link rel="stylesheet" type="text/css" href="/_/style/base.css">
 </head>
 <body>
   <h1>ddl.yazou.org - {{Path}}</h1>
   <hr/>
   <table>
     <tr>
-      <td>
-        <a href="..">..</a>
+      <td></td>
+      <td class="filename">
+        <a href="javascript:setsort('alpha')">name</a>
       </td>
       <td>
-        sort
+        <a href="javascript:setsort('date')">date</a>
+      </td>
+      <td>
+        <a href="javascript:setsort('size')">size</a>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <img src="/_/images/folder.png"/>
+      </td>
+      <td class="filename">
+        <a href="..">../</a>
+      </td>
+      <td>
+        -
+      </td>
+      <td>
+        -
       </td>
     </tr>
     {{#Files}}
@@ -24,13 +44,15 @@
       <td>
         <img src="{{#Type}}{{Image}}{{/Type}}"/>
       </td>
-      <td>
+      <td class="filename">
         <a href="{{DownloadPath}}">
           {{Name}}{{#IsDir}}/{{/IsDir}}
         </a>
       </td>
       <td>
         {{ModTime}}
+      </td>
+      <td class="space">
       </td>
       <td>
         {{#IsDir}}

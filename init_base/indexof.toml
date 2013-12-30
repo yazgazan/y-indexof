@@ -2,11 +2,11 @@
 Listen = "localhost:1224"
 Test = "toto"
 Root = "/home/yazou/gocode/src/github.com/yazgazan/y-indexof"
+# Root = "www"
 # DownloadPrefix = "www"
 
 [Types.image]
 Exts = [".png", ".jpg", ".jpeg", ".gif"]
-Image = "/_/images/image.png"
 
 [Types.video]
 Exts = [".avi", ".mp4", ".mkv", ".flv"]
@@ -14,10 +14,10 @@ Image = "/_/images/video.png"
 
 [Types.music]
 Exts = [".mp3", ".ogg", ".flac"]
+Image = "/_/images/music.png"
 
 [Types.txt]
 Exts = [".txt", ".list"]
-Image = "/_/images/document.png"
 
 [Types.txt.Headers]
 content-type = ["text/html"]
@@ -37,8 +37,4 @@ Image = "/_/images/default.png"
 
 [Types.Folder]
 Image = "/_/images/folder.png"
-
-[Types.All.Headers]
-proxy-authenticate = ["Basic"]
-
 

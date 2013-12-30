@@ -2,7 +2,9 @@
 package start
 
 import (
+  "net/http"
   "os"
+  "sort"
   "encoding/json"
 )
 
@@ -12,6 +14,23 @@ type IndexContext struct{
   DownloadPrefix  string
   Files           []IndexItem
   JsonContext     string
+  Sort            string
+  UserDefined     map[string]string
+}
+
+func (context *IndexContext) InitSort(req *http.Request) {
+  cookie, err := req.Cookie("sort")
+  if err != nil {
+    return
+  }
+  switch cookie.Value {
+    case "date": context.Sort = "date"
+    case "size": context.Sort = "size"
+    case "alpha": context.Sort = "alpha"
+  }
+  if context.Sort == "" {
+    context.Sort = "alpha"
+  }
 }
 
 func (context *IndexContext) InitContext(method *Method, config Config) error {
@@ -19,9 +38,16 @@ func (context *IndexContext) InitContext(method *Method, config Config) error {
   context.Path = method.Path
   context.FullPath = method.FullPath
   context.DownloadPrefix = config.DownloadPrefix
+  context.UserDefined = config.UserDefined
 
   if err := context.ReadDirInfos(config); err != nil {
     return err
+  }
+
+  switch context.Sort {
+    case "date": sort.Sort(DateSortFiles(context.Files))
+    case "alpha": sort.Sort(AlphaSortFiles(context.Files))
+    case "size": sort.Sort(SizeSortFiles(context.Files))
   }
 
   context.CreateJson()
