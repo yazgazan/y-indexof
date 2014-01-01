@@ -21,6 +21,7 @@ type IndexContext struct{
 func (context *IndexContext) InitSort(req *http.Request) {
   cookie, err := req.Cookie("sort")
   if err != nil {
+    context.Sort = "alpha"
     return
   }
   switch cookie.Value {
