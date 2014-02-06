@@ -12,11 +12,14 @@ func HandleStatic(
   req *http.Request,
   method *Method,
   config Config,) error {
-  mimetype, err := magicmime.TypeByFile(method.FullPath)
+  mime, err := magicmime.New()
+  if err == nil {
+    mimetype, err := mime.TypeByFile(method.FullPath)
 
-  if err == nil && len(mimetype) != 0 {
-    w.Header()["content-type"] = make([]string, 1)
-    w.Header()["content-type"][0] = mimetype
+    if err == nil && len(mimetype) != 0 {
+      w.Header()["content-type"] = make([]string, 1)
+      w.Header()["content-type"][0] = mimetype
+    }
   }
   method.ResolveType(config)
   if len(method.Type.Headers) != 0 {
