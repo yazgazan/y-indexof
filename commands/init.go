@@ -20,7 +20,7 @@ type InitParams struct{
 func Init(cmd *cobra.Command, args []string, params InitParams) {
   var err error
 
-  if params.Git == true {
+  if params.Git == true && params.Local == false {
     err = initlib.GitInit(params.Url, params.Dest, params.Branch)
     if err != nil {
       fmt.Println("Error fetching git repo.")
