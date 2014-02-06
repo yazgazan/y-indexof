@@ -5,7 +5,7 @@ FILES=		$(shell find . -maxdepth 1)
 all:		tar
 
 $(NAME):
-	tar -cvf $@ $(FILES)
+	tar --exclude-vcs -cvf $@ $(FILES)
 
 tar:		$(NAME)
 
