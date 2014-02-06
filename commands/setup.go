@@ -29,6 +29,10 @@ func setupCmd() *cobra.Command {
     &initParams.Local, "local", "l",
     M_init_local_default, M_init_local_help,
   )
+  initCmd.Flags().BoolVarP(
+    &initParams.Git, "git", "g",
+    M_init_git_default, M_init_git_help,
+  )
   initCmd.Flags().StringVarP(
     &initParams.File, "file", "f",
     M_init_file_default, M_init_file_help,
@@ -36,6 +40,10 @@ func setupCmd() *cobra.Command {
   initCmd.Flags().StringVarP(
     &initParams.Url, "url", "u",
     M_init_url_default, M_init_url_help,
+  )
+  initCmd.Flags().StringVarP(
+    &initParams.Branch, "branch", "b",
+    M_init_branch_default, M_init_branch_help,
   )
   initCmd.Flags().StringVarP(
     &initParams.Dest, "dest", "d",

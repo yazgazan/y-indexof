@@ -9,15 +9,24 @@ import (
 )
 
 type InitParams struct{
-  Local bool
-  File  string
-  Url   string
-  Dest  string
+  Local   bool
+  Git     bool
+  File    string
+  Url     string
+  Branch  string
+  Dest    string
 }
 
 func Init(cmd *cobra.Command, args []string, params InitParams) {
   var err error
 
+  if params.Git == true {
+    err = initlib.GitInit(params.Url, params.Dest, params.Branch)
+    if err != nil {
+      fmt.Println("Error fetching git repo.")
+    }
+    return
+  }
   if params.Local == false {
     err = initlib.DownloadInit(params.Url, params.File)
     if err != nil {

@@ -9,12 +9,12 @@ import (
 )
 
 func DownloadInit(url string, outpath string) error {
-  fmt.Println("ha !")
   outfile, err := os.Create(outpath)
   if err != nil {
     return err
   }
 
+  fmt.Println("Downloading tarball from ", url, "...")
   res, err := http.Get(url)
   if err != nil {
     return err
