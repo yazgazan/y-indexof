@@ -16,6 +16,7 @@ const (
   Method_Static =   iota // serving file
   Method_Index =    iota // serving dir
   Method_Internal = iota // serving internal files (images, css, js ...)
+  Method_CustomView = iota // serving custom views
 )
 
 const (
