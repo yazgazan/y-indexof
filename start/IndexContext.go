@@ -35,6 +35,7 @@ func (context *IndexContext) InitSort(req *http.Request) {
 }
 
 func (context *IndexContext) InitContext(method *Method, config Config) error {
+  fullPath := method.FullPath
 
   context.Path = method.Path
   context.FullPath = method.FullPath
@@ -51,7 +52,19 @@ func (context *IndexContext) InitContext(method *Method, config Config) error {
     case "size": sort.Sort(SizeSortFiles(context.Files))
   }
 
+  if config.ShowFullPath == false {
+    context.FullPath = context.Path
+    for id := range context.Files {
+      context.Files[id].FullPath = context.Files[id].Path
+    }
+  }
   context.CreateJson()
+  if config.ShowFullPath == false {
+    context.FullPath = fullPath
+    for id := range context.Files {
+      context.Files[id].FullPath = context.Files[id].fullPath
+    }
+  }
 
   return nil
 }

@@ -19,6 +19,9 @@ func HandleMethod(
   if method.MethodId == Method_Index {
     return HandleIndex(w, req, method, config)
   }
-  return MakeError(501, "fake error")
+  if method.MethodId == Method_CustomView {
+    return HandleIndex(w, req, method, config)
+  }
+  return MakeError(500, "Method not found (should not happen)")
 }
 

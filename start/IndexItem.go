@@ -20,6 +20,7 @@ type IndexItem struct{
   IsDir         bool
   fileInfo      os.FileInfo
   Type          Type
+  fullPath      string
 }
 
 func (file *IndexItem) Populate(
@@ -29,6 +30,7 @@ func (file *IndexItem) Populate(
     file.Name = info.Name()
     file.Path = path.Join(context.Path, info.Name())
     file.FullPath = path.Join(context.FullPath, info.Name())
+    file.fullPath = file.FullPath
     file.Size = info.Size()
     file.HumanSize = utils.GetHumanReadableSize(info.Size())
     file.Mode = info.Mode().String()

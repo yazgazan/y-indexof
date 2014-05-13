@@ -30,13 +30,13 @@ type Method struct{
   Path      string // URL.Path
   MethodId  int // see Methodes types
   FullPath  string // e.g localhost:1243
-  View      string // in case of Method_index
+  View      string // in case of Method_index or Method_CustomView
   ResType   int // see Response types
   Type      Type // type config
 }
 
 func (m *Method) FromDirConf(dirConf DirConfig, config Config) {
-  m.View = dirConf.View
+  m.View = path.Join(config.Views, dirConf.View)
   m.FullPath = path.Join(config.Root, m.Path)
 }
 
@@ -55,7 +55,12 @@ func (m *Method) ResolveType(config Config) {
     if ok == true {
       m.Type.Merge(defaultType)
     }
-    ext := path.Ext(m.Path)
+    var ext string
+    if m.MethodId == Method_CustomView {
+      ext = path.Ext(m.View)
+    } else {
+      ext = path.Ext(m.Path)
+    }
     if ext == "" {
       return
     }
@@ -115,6 +120,34 @@ func MakeMethod() *Method {
   }
 }
 
+func MatchCustomView(urlPath string, config Config) bool {
+  _, name := path.Split(urlPath)
+
+  if len(name) == 0 {
+    return false
+  }
+  for key, _ := range config.CustomViews {
+    if key == name {
+      return true
+    }
+  }
+  return false
+}
+
+func CustomViewExtractPath(urlPath string, config Config) string {
+  _, name := path.Split(urlPath)
+
+  if len(name) == 0 {
+    return ""
+  }
+  for key, val := range config.CustomViews {
+    if key == name {
+      return path.Join(config.Views, path.Join("custom/", val))
+    }
+  }
+  return ""
+}
+
 func MatchInternal(urlPath string) bool {
   return strings.HasPrefix(urlPath, "/_/")
 }
@@ -124,6 +157,7 @@ func GetMethod(
   req *http.Request,
   config Config,
 ) (*Method, error) {
+  var isCustomView = false
   var method = MakeMethod()
   method.Path = req.URL.Path
 
@@ -132,9 +166,15 @@ func GetMethod(
     method.MethodId = Method_Internal
     method.FullPath = fmt.Sprintf("static/%s", method.Path[3:])
   } else {
-    dirConf := ConstructDirConfig(req.URL.Path, config)
+    isCustomView = MatchCustomView(method.Path, config)
 
+    dirConf := ConstructDirConfig(req.URL.Path, config)
     method.FromDirConf(*dirConf, config)
+
+    if isCustomView == true {
+      method.View =  CustomViewExtractPath(method.Path, config)
+      method.FullPath, _ = path.Split(method.FullPath)
+    }
   }
 
   infos, err := os.Stat(method.FullPath)
@@ -142,12 +182,16 @@ func GetMethod(
     return nil, MakeError404()
   }
 
-  if infos.Mode().IsDir() == true && match == false {
+  if isCustomView == true && infos.Mode().IsDir() == true {
+    method.MethodId = Method_CustomView
+  } else if infos.Mode().IsDir() == true && match == false {
     method.MethodId = Method_Index
   } else if infos.Mode().IsRegular() == true {
     method.MethodId = Method_Static
   } else if match == true {
     return nil, MakeError403()
+  } else if isCustomView == true {
+    return nil, MakeError500("custom view not found")
   } else {
     return nil, MakeError500("unknown file mode")
   }

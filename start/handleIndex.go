@@ -6,7 +6,6 @@ import (
 
   "net/http"
   "fmt"
-  "path"
 )
 
 func HandleIndex(
@@ -19,7 +18,7 @@ func HandleIndex(
 
   context.InitSort(req)
   context.InitContext(method, config)
-  view := path.Join(config.Views, method.View)
+  view := method.View
   res := mustache.RenderFile(view, context)
   fmt.Fprint(w, res)
   return nil
