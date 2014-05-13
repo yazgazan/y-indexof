@@ -26,7 +26,7 @@ func Start(cmd *cobra.Command, args []string, params StartParams) {
   // read config
   conf, err := start.ReadConfig(start.Config_file_name)
   if err != nil {
-    fmt.Println("Failed to start, couldn't load config")
+    fmt.Printf("Failed to start, couldn't load config : %s\n", err)
     return
   }
 
