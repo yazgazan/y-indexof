@@ -2,7 +2,7 @@
 package init
 
 import (
-  "github.com/sourcegraph/go-vcs"
+  "github.com/yazgazan/go-vcs"
 
   "fmt"
 )
