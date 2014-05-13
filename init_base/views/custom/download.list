@@ -1,0 +1,2 @@
+{{#Files}}{{^IsDir}}http://dir.yazou.org{{DownloadPath}}
+{{/IsDir}}{{/Files}}

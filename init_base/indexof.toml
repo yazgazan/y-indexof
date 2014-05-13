@@ -1,8 +1,13 @@
 
 Listen = "localhost:1224"
 Root = "."
+# ShowFullPath = true
 # Root = "www"
 # DownloadPrefix = "www"
+
+[CustomViews]
+list  = "download.list"
+json  = "list.json"
 
 [Types.image]
 Exts = [".png", ".jpg", ".jpeg", ".gif"]
