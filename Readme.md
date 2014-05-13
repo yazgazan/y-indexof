@@ -1,17 +1,17 @@
 Y-IndexOf : Easy and modular indexOf in go
 ==========================================
 
-# Description
+## Description
 
 Y-IndexOf is an easy to use and modular indexOf server.
 
-# Installing
+## Installing
 
 Installing Y-IndexOf is as simple as typing `go get -u github.com/yazgazan/y-indexof`.
 It is possible that go yells at you saying you are missing `magic.h`.
 In such case, install the libmagic-dev package from your linux distribution repositories.
 
-# Using
+## Using
 
 Start by initializing an index-of directory :
 
@@ -26,16 +26,16 @@ Edit the config file `indexof.toml` and start the server :
 y-indexof start
 ```
 
-# Requirements
+## Requirements
 
 - [Go](http://golang.org/)
 - libmagic-dev (from your linux distrib repositories)
 
-# Compatibility
+## Compatibility
 
 It has not been tested on Windows and BSD.
 
-# License
+## License
 
 Beerware (from [http://people.freebsd.org/~phk/](http://people.freebsd.org/~phk/))
 
