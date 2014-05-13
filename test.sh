@@ -9,7 +9,7 @@ mkdir -p "$TESTDIR"
 cd "$TESTDIR"
 y-indexof init -f ../init.tar -l
 cd -
-diff -r "$TESTDIR" "$BASEDIR"
+diff --exclude=.git -r "$TESTDIR" "$BASEDIR"
 
 # Testing start ...
 cd "$TESTDIR"

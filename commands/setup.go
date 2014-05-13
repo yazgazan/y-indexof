@@ -54,7 +54,7 @@ func setupCmd() *cobra.Command {
   var startParams StartParams
   startCmd := &cobra.Command{
     Use: "start",
-    Short: "Run the server",
+    Short: M_start_help,
     Run: func (cmd *cobra.Command, args []string) {
       Start(cmd, args, startParams)
     },

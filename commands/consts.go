@@ -11,6 +11,7 @@ const (
   M_init_url_help = "Where to download init.tar from"
   M_init_branch_help = "Which branch to checkout (git only)"
   M_init_dest_help = "Where to extract init.tar"
+  M_start_help = "Run the server"
   M_start_listen_help = "Port to listen (override config port)"
   M_start_dir_help = "Directory containing the configurations and files"
 

@@ -45,6 +45,7 @@ type Config struct{
   DownloadPrefix  string
   Types           map[string]Type
   UserDefined     map[string]string
+  CustomViews     map[string]string
 }
 
 func MakeConfig() *Config {
