@@ -19,19 +19,11 @@ const (
   Method_CustomView = iota // serving custom views
 )
 
-const (
-  // Responses types
-  Response_html = iota // use the view to render html index
-  Response_json = iota // respond a json listing - TODO Later
-  // more to come ...
-)
-
 type Method struct{
   Path      string // URL.Path
   MethodId  int // see Methodes types
   FullPath  string // e.g localhost:1243
   View      string // in case of Method_index or Method_CustomView
-  ResType   int // see Response types
   Type      Type // type config
 }
 
@@ -116,7 +108,6 @@ func ConstructDirConfig(urlPath string, config Config) *DirConfig {
 func MakeMethod() *Method {
   return &Method{
     MethodId: Method_Unknown,
-    ResType: Response_html,
   }
 }
 
