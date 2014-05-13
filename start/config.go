@@ -43,6 +43,7 @@ type Config struct{
   IndexView       string
   Static          string
   DownloadPrefix  string
+  ShowFullPath    bool
   Types           map[string]Type
   UserDefined     map[string]string
   CustomViews     map[string]string
@@ -56,6 +57,7 @@ func MakeConfig() *Config {
     IndexView: default_indexView,
     Static: default_static,
     DownloadPrefix: default_download_prefix,
+    ShowFullPath: false,
   }
 }
 
