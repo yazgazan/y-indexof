@@ -19,7 +19,7 @@ func HandleStatic(
   req *http.Request,
   method *Method,
   config Config,) error {
-  mime, err := magicmime.New()
+  mime, err := magicmime.New(magicmime.MAGIC_MIME_TYPE | magicmime.MAGIC_SYMLINK | magicmime.MAGIC_ERROR)
   if err != nil {
     return err
   }
