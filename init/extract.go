@@ -10,71 +10,70 @@
 package init
 
 import (
-  "archive/tar"
-  "os"
-  "io"
-  "fmt"
-  "path"
+	"archive/tar"
+	"fmt"
+	"io"
+	"os"
+	"path"
 )
 
 func extractDir(path string, mode os.FileMode) error {
-  err := os.MkdirAll(path, mode)
-  return err
+	err := os.MkdirAll(path, mode)
+	return err
 }
 
 func extractFile(path string, mode os.FileMode, fileIn io.Reader) error {
-  file, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, mode)
-  if err != nil {
-    return err
-  }
-  _, err = io.Copy(file, fileIn)
-  if err != nil {
-    return err
-  }
-  return nil
+	file, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, mode)
+	if err != nil {
+		return err
+	}
+	_, err = io.Copy(file, fileIn)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func Extract(filename string, dest string) error {
-  file, err := os.Open(filename)
-  if err != nil {
-    return err
-  }
-  tr := tar.NewReader(file)
-  for {
-    header, err := tr.Next()
-    if err == io.EOF {
-      break
-    }
-    if err != nil {
-      return err
-    }
+	file, err := os.Open(filename)
+	if err != nil {
+		return err
+	}
+	tr := tar.NewReader(file)
+	for {
+		header, err := tr.Next()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return err
+		}
 
-    fullPath := path.Join(dest, header.Name)
-    mode := header.FileInfo().Mode()
+		fullPath := path.Join(dest, header.Name)
+		mode := header.FileInfo().Mode()
 
-    fmt.Println("Extracting", header.Name, "...")
-    if mode.IsDir() {
-      err = extractDir(fullPath, mode)
-      if err != nil {
-        return err
-      }
-    } else if mode.IsRegular() {
-      err = extractFile(fullPath, mode, tr)
-      if err != nil {
-        return err
-      }
-    } else if header.Typeflag == tar.TypeLink {
-      continue // TODO : see what it is for ...
-    } else {
-      fmt.Println("Don't know how to extract", header.Name)
-      fmt.Println("File Type :", header.Typeflag)
-      fmt.Println("Report the error (with file type) to yazgazan@gmail.com")
-    }
-  }
-  err = file.Close()
-  if err != nil {
-    panic(err)
-  }
-  return nil
+		fmt.Println("Extracting", header.Name, "...")
+		if mode.IsDir() {
+			err = extractDir(fullPath, mode)
+			if err != nil {
+				return err
+			}
+		} else if mode.IsRegular() {
+			err = extractFile(fullPath, mode, tr)
+			if err != nil {
+				return err
+			}
+		} else if header.Typeflag == tar.TypeLink {
+			continue // TODO : see what it is for ...
+		} else {
+			fmt.Println("Don't know how to extract", header.Name)
+			fmt.Println("File Type :", header.Typeflag)
+			fmt.Println("Report the error (with file type) to yazgazan@gmail.com")
+		}
+	}
+	err = file.Close()
+	if err != nil {
+		panic(err)
+	}
+	return nil
 }
-

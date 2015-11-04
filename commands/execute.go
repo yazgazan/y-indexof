@@ -10,8 +10,7 @@
 package commands
 
 func Execute() {
-  Cmd := setupCmd()
+	Cmd := setupCmd()
 
-  Cmd.Execute()
+	Cmd.Execute()
 }
-

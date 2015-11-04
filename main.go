@@ -10,11 +10,9 @@
 package main
 
 import (
-  "github.com/yazgazan/y-indexof/commands"
+	"github.com/yazgazan/y-indexof/commands"
 )
 
-
 func main() {
-  commands.Execute()
+	commands.Execute()
 }
-

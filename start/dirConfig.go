@@ -10,50 +10,49 @@
 package start
 
 import (
-  "github.com/BurntSushi/toml"
+	"github.com/BurntSushi/toml"
 
-  "io/ioutil"
+	"io/ioutil"
 )
 
-type DirConfig struct{
-  View      string
+type DirConfig struct {
+	View string
 }
 
-type DirConfigError struct{
-  What  string
+type DirConfigError struct {
+	What string
 }
 
 func (e *DirConfigError) Error() string {
-  return e.What
+	return e.What
 }
 
 func (c *DirConfig) CheckDirConfig() error {
-  return nil
+	return nil
 }
 
 func MakeDirConfig(config Config) *DirConfig {
-  return &DirConfig{
-    View: config.IndexView,
-  }
+	return &DirConfig{
+		View: config.IndexView,
+	}
 }
 
 func ReadDirConfig(path string, config Config) (*DirConfig, error) {
-  conf := MakeDirConfig(config)
+	conf := MakeDirConfig(config)
 
-  content, err := ioutil.ReadFile(path)
-  if err != nil {
-    return nil, err
-  }
+	content, err := ioutil.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
 
-  _, err = toml.Decode(string(content), &conf)
-  if err != nil {
-    return nil, err
-  }
-  err = conf.CheckDirConfig()
-  if err != nil {
-    return nil, err
-  }
+	_, err = toml.Decode(string(content), &conf)
+	if err != nil {
+		return nil, err
+	}
+	err = conf.CheckDirConfig()
+	if err != nil {
+		return nil, err
+	}
 
-  return conf, nil
+	return conf, nil
 }
-

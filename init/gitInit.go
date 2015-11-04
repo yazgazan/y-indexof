@@ -10,22 +10,21 @@
 package init
 
 import (
-  "github.com/yazgazan/go-vcs"
+	"github.com/yazgazan/go-vcs"
 
-  "fmt"
+	"fmt"
 )
 
 func GitInit(url string, dest string, branch string) error {
-  fmt.Println("Cloning ", url, " to ", dest, " ...")
-  repo, err := vcs.Git.Clone(url, dest)
+	fmt.Println("Cloning ", url, " to ", dest, " ...")
+	repo, err := vcs.Git.Clone(url, dest)
 
-  if err != nil {
-    return err
-  }
+	if err != nil {
+		return err
+	}
 
-  fmt.Println("Checkout ", branch, " ...")
-  _, err = repo.CheckOut(branch)
+	fmt.Println("Checkout ", branch, " ...")
+	_, err = repo.CheckOut(branch)
 
-  return err
+	return err
 }
-

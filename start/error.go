@@ -10,34 +10,33 @@
 package start
 
 import (
-  "fmt"
+	"fmt"
 )
 
-type Error struct{
-  What  string
-  Code  int
+type Error struct {
+	What string
+	Code int
 }
 
 func (e *Error) Error() string {
-  return e.What
+	return e.What
 }
 
 func MakeError(code int, msg string) *Error {
-  return &Error{
-    fmt.Sprintf("Error %d : %s", code, msg),
-    code,
-  }
+	return &Error{
+		fmt.Sprintf("Error %d : %s", code, msg),
+		code,
+	}
 }
 
 func MakeError500(msg string) *Error {
-  return MakeError(500, msg)
+	return MakeError(500, msg)
 }
 
 func MakeError404() *Error {
-  return MakeError(404, "File not found")
+	return MakeError(404, "File not found")
 }
 
 func MakeError403() *Error {
-  return MakeError(404, "Access Forbiden")
+	return MakeError(404, "Access Forbiden")
 }
-

@@ -10,30 +10,29 @@
 package start
 
 import (
-  "net/http"
+	"net/http"
 )
 
-type Cache struct{
-  Objects   map[string]*Method
+type Cache struct {
+	Objects map[string]*Method
 }
 
 func MakeCache() *Cache {
-  return &Cache{
-    make(map[string]*Method),
-  }
+	return &Cache{
+		make(map[string]*Method),
+	}
 }
 
 func GetMethodFromCache(req *http.Request, cache *Cache) *Method {
-  method, ok := cache.Objects[req.URL.Path]
+	method, ok := cache.Objects[req.URL.Path]
 
-  if ok == false {
-    return nil
-  }
+	if ok == false {
+		return nil
+	}
 
-  return method
+	return method
 }
 
 func CacheSave(method *Method, cache *Cache) {
-  cache.Objects[method.Path] = method
+	cache.Objects[method.Path] = method
 }
-
