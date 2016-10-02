@@ -23,9 +23,9 @@ func HandleStatic(
 	if err != nil {
 		return err
 	}
-	defer magicmime.Close()
 
 	mimetype, err := magicmime.TypeByFile(method.FullPath)
+	magicmime.Close()
 
 	if err == nil && len(mimetype) != 0 {
 		w.Header()["content-type"] = make([]string, 1)
