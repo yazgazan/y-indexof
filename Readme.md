@@ -1,6 +1,10 @@
 Y-IndexOf : Easy and modular indexOf in go
 ==========================================
 
+[![Build Status](https://travis-ci.org/yazgazan/y-indexof.svg?branch=master)](https://travis-ci.org/yazgazan/y-indexof)
+[![Go Report Card](https://goreportcard.com/badge/github.com/yazgazan/y-indexof)](https://goreportcard.com/report/github.com/yazgazan/y-indexof)
+[![Go version](https://img.shields.io/badge/go-1.6%2B-brightgreen.svg)](https://github.com/yazgazan/jaydiff)
+
 ## Description
 
 Y-IndexOf is an easy to use and modular indexOf server.
