@@ -15,12 +15,11 @@ import (
 	"fmt"
 )
 
-func HandleError(w http.ResponseWriter, err error) {
+func handleError(w http.ResponseWriter, err error) {
 	var code int
 
 	msg := err.Error()
-	customError, ok := err.(*Error)
-	if ok == true {
+	if customError, ok := err.(*httpError); ok {
 		code = customError.Code
 	} else {
 		code = 500
@@ -28,30 +27,31 @@ func HandleError(w http.ResponseWriter, err error) {
 	http.Error(w, msg, code)
 }
 
+// Start starts a server
 func Start(conf Config) error {
-	var cache = MakeCache()
+	var cache = newCache()
 
 	fmt.Printf("%+v\n", conf)
 	http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
-		var method *Method
+		var method *methodConfig
 		var err error
 
-		method = GetMethodFromCache(req, cache)
+		method = getMethodFromCache(req, cache)
 
 		if method == nil || true {
-			method, err = GetMethod(w, req, conf)
+			method, err = getMethod(w, req, conf)
 			if err != nil {
-				HandleError(w, err)
+				handleError(w, err)
 				return
 			}
-			CacheSave(method, cache)
+			cacheSave(method, cache)
 		} else {
 			fmt.Println("from cache :D")
 		}
 		fmt.Printf("%+v\n", method)
-		err = HandleMethod(w, req, method, conf)
+		err = handleMethod(w, req, method, conf)
 		if err != nil {
-			HandleError(w, err)
+			handleError(w, err)
 		}
 	})
 	err := http.ListenAndServe(conf.Listen, nil)

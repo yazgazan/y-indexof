@@ -9,8 +9,8 @@
 
 package commands
 
-func Execute() {
+func Execute() error {
 	Cmd := setupCmd()
 
-	Cmd.Execute()
+	return Cmd.Execute()
 }

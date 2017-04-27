@@ -11,28 +11,34 @@ package start
 
 import (
 	"net/http"
+	"sync"
 )
 
-type Cache struct {
-	Objects map[string]*Method
+type methodCache struct {
+	Objects map[string]*methodConfig
+	sync.RWMutex
 }
 
-func MakeCache() *Cache {
-	return &Cache{
-		make(map[string]*Method),
+func newCache() *methodCache {
+	return &methodCache{
+		Objects: make(map[string]*methodConfig),
 	}
 }
 
-func GetMethodFromCache(req *http.Request, cache *Cache) *Method {
+func getMethodFromCache(req *http.Request, cache *methodCache) *methodConfig {
+	cache.RLock()
 	method, ok := cache.Objects[req.URL.Path]
+	cache.RUnlock()
 
-	if ok == false {
-		return nil
+	if ok {
+		return method
 	}
 
-	return method
+	return nil
 }
 
-func CacheSave(method *Method, cache *Cache) {
+func cacheSave(method *methodConfig, cache *methodCache) {
+	cache.Lock()
 	cache.Objects[method.Path] = method
+	cache.Unlock()
 }

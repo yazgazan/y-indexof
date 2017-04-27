@@ -17,12 +17,12 @@ import (
 	"os"
 )
 
-type StartParams struct {
+type startParams struct {
 	Listen string
 	Dir    string
 }
 
-func Start(cmd *cobra.Command, args []string, params StartParams) {
+func runStart(cmd *cobra.Command, args []string, params startParams) {
 
 	// move to Dir
 	err := os.Chdir(params.Dir)
@@ -32,7 +32,7 @@ func Start(cmd *cobra.Command, args []string, params StartParams) {
 	}
 
 	// read config
-	conf, err := start.ReadConfig(start.Config_file_name)
+	conf, err := start.ReadConfig(start.ConfigFileName)
 	if err != nil {
 		fmt.Printf("Failed to start, couldn't load config : %s\n", err)
 		return
@@ -44,5 +44,8 @@ func Start(cmd *cobra.Command, args []string, params StartParams) {
 	}
 
 	// start server
-	start.Start(*conf)
+	err = start.Start(*conf)
+	if err != nil {
+		fmt.Printf("Failed to start: %s\n", err)
+	}
 }

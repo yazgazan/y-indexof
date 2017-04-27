@@ -13,53 +13,53 @@ import (
 	"strings"
 )
 
-type DateSortFiles []IndexItem
+type dateSortFiles []indexItem
 
-func (a DateSortFiles) Len() int {
+func (a dateSortFiles) Len() int {
 	return len(a)
 }
 
-func (a DateSortFiles) Swap(i int, j int) {
+func (a dateSortFiles) Swap(i int, j int) {
 	a[i], a[j] = a[j], a[i]
 }
 
-func (a DateSortFiles) Less(i int, j int) bool {
-	if a[i].IsDir != a[j].IsDir == true { // folders first
+func (a dateSortFiles) Less(i int, j int) bool {
+	if a[i].IsDir != a[j].IsDir { // folders first
 		return a[i].IsDir
 	}
 	// most recent first
 	return a[i].ModTime > a[j].ModTime
 }
 
-type AlphaSortFiles []IndexItem
+type alphaSortFiles []indexItem
 
-func (a AlphaSortFiles) Len() int {
+func (a alphaSortFiles) Len() int {
 	return len(a)
 }
 
-func (a AlphaSortFiles) Swap(i int, j int) {
+func (a alphaSortFiles) Swap(i int, j int) {
 	a[i], a[j] = a[j], a[i]
 }
 
-func (a AlphaSortFiles) Less(i int, j int) bool {
-	if a[i].IsDir != a[j].IsDir == true { // folders first
+func (a alphaSortFiles) Less(i int, j int) bool {
+	if a[i].IsDir != a[j].IsDir { // folders first
 		return a[i].IsDir
 	}
 	return strings.ToLower(a[i].Name) < strings.ToLower(a[j].Name)
 }
 
-type SizeSortFiles []IndexItem
+type sizeSortFiles []indexItem
 
-func (a SizeSortFiles) Len() int {
+func (a sizeSortFiles) Len() int {
 	return len(a)
 }
 
-func (a SizeSortFiles) Swap(i int, j int) {
+func (a sizeSortFiles) Swap(i int, j int) {
 	a[i], a[j] = a[j], a[i]
 }
 
-func (a SizeSortFiles) Less(i int, j int) bool {
-	if a[i].IsDir != a[j].IsDir == true { // folders first
+func (a sizeSortFiles) Less(i int, j int) bool {
+	if a[i].IsDir != a[j].IsDir { // folders first
 		return a[i].IsDir
 	}
 	// biggest file first

@@ -16,36 +16,42 @@ import (
 	"sort"
 )
 
-type IndexContext struct {
+type indexContext struct {
 	Path           string
 	FullPath       string
 	DownloadPrefix string
-	Files          []IndexItem
-	JsonContext    string
+	Files          []indexItem
+	JSONContext    string
 	Sort           string
 	UserDefined    map[string]string
 }
 
-func (context *IndexContext) InitSort(req *http.Request) {
+const (
+	sortAlpha = "alpha"
+	sortDate  = "date"
+	sortSize  = "size"
+)
+
+func (context *indexContext) InitSort(req *http.Request) {
 	cookie, err := req.Cookie("sort")
 	if err != nil {
-		context.Sort = "alpha"
+		context.Sort = sortAlpha
 		return
 	}
 	switch cookie.Value {
-	case "date":
-		context.Sort = "date"
-	case "size":
-		context.Sort = "size"
-	case "alpha":
-		context.Sort = "alpha"
+	case sortDate:
+		context.Sort = sortDate
+	case sortSize:
+		context.Sort = sortSize
+	case sortAlpha:
+		context.Sort = sortAlpha
 	}
 	if context.Sort == "" {
-		context.Sort = "alpha"
+		context.Sort = sortAlpha
 	}
 }
 
-func (context *IndexContext) InitContext(method *Method, config Config) error {
+func (context *indexContext) InitContext(method *methodConfig, config Config) error {
 	fullPath := method.FullPath
 
 	context.Path = method.Path
@@ -58,22 +64,22 @@ func (context *IndexContext) InitContext(method *Method, config Config) error {
 	}
 
 	switch context.Sort {
-	case "date":
-		sort.Sort(DateSortFiles(context.Files))
-	case "alpha":
-		sort.Sort(AlphaSortFiles(context.Files))
-	case "size":
-		sort.Sort(SizeSortFiles(context.Files))
+	case sortDate:
+		sort.Sort(dateSortFiles(context.Files))
+	case sortAlpha:
+		sort.Sort(alphaSortFiles(context.Files))
+	case sortSize:
+		sort.Sort(sizeSortFiles(context.Files))
 	}
 
-	if config.ShowFullPath == false {
+	if !config.ShowFullPath {
 		context.FullPath = context.Path
 		for id := range context.Files {
 			context.Files[id].FullPath = context.Files[id].Path
 		}
 	}
-	context.CreateJson()
-	if config.ShowFullPath == false {
+	context.CreateJSON()
+	if !config.ShowFullPath {
 		context.FullPath = fullPath
 		for id := range context.Files {
 			context.Files[id].FullPath = context.Files[id].fullPath
@@ -83,42 +89,35 @@ func (context *IndexContext) InitContext(method *Method, config Config) error {
 	return nil
 }
 
-func (context *IndexContext) CreateJson() {
+func (context *indexContext) CreateJSON() {
 	bytes, err := json.Marshal(context)
 
 	if err != nil {
 		panic(err) // shouldn't happen
 	}
-	context.JsonContext = string(bytes)
+	context.JSONContext = string(bytes)
 }
 
-func IsExcluded(file os.FileInfo) bool {
+func isExcluded(file os.FileInfo) bool {
 	name := file.Name()
 
-	if name[0] == '.' {
-		return true
-	}
-	if name == "indexof.toml" {
-		return true
-	}
-
-	return false
+	return (name != "" && name[0] == '.') || name == "indexof.toml"
 }
 
-func CountFiles(files []os.FileInfo) int {
+func countFiles(files []os.FileInfo) int {
 	count := 0
 
 	for _, info := range files {
-		if IsExcluded(info) == true {
+		if isExcluded(info) {
 			continue
 		}
-		count += 1
+		count++
 	}
 
 	return count
 }
 
-func (context *IndexContext) ReadDirInfos(config Config) error {
+func (context *indexContext) ReadDirInfos(config Config) error {
 	file, err := os.Open(context.FullPath)
 
 	if err != nil {
@@ -129,12 +128,12 @@ func (context *IndexContext) ReadDirInfos(config Config) error {
 	if err != nil {
 		return err
 	}
-	filesCount := CountFiles(fileInfos)
-	context.Files = make([]IndexItem, filesCount)
+	filesCount := countFiles(fileInfos)
+	context.Files = make([]indexItem, filesCount)
 
 	i := 0
 	for _, info := range fileInfos {
-		if IsExcluded(info) == true {
+		if isExcluded(info) {
 			continue
 		}
 		context.Files[i].Populate(info, context, config)

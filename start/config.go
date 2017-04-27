@@ -15,19 +15,13 @@ import (
 	"io/ioutil"
 )
 
-type TypeHeader struct {
-	Key    string
-	Value  string
-	Values []string
-}
-
-type Type struct {
+type fileType struct {
 	Exts    []string
 	Image   string
 	Headers map[string][]string
 }
 
-func (base *Type) Merge(extend Type) {
+func (base *fileType) Merge(extend fileType) {
 	if len(extend.Image) != 0 {
 		base.Image = extend.Image
 	}
@@ -52,25 +46,25 @@ type Config struct {
 	Static         string
 	DownloadPrefix string
 	ShowFullPath   bool
-	Types          map[string]Type
+	Types          map[string]fileType
 	UserDefined    map[string]string
 	CustomViews    map[string]string
 }
 
-func MakeConfig() *Config {
+func newConfig() *Config {
 	return &Config{
-		Listen:         default_listen,
-		Root:           default_root,
-		Views:          default_views,
-		IndexView:      default_indexView,
-		Static:         default_static,
-		DownloadPrefix: default_download_prefix,
+		Listen:         defaultListen,
+		Root:           defaultRoot,
+		Views:          defaultViews,
+		IndexView:      defaultIndexView,
+		Static:         defaultStatic,
+		DownloadPrefix: defaultDownloadPrefix,
 		ShowFullPath:   false,
 	}
 }
 
 func ReadConfig(path string) (*Config, error) {
-	conf := MakeConfig()
+	conf := newConfig()
 
 	content, err := ioutil.ReadFile(path)
 	if err != nil {

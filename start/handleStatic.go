@@ -15,15 +15,15 @@ import (
 	"net/http"
 )
 
-func HandleStatic(w http.ResponseWriter, req *http.Request, method *Method, config Config) error {
+func handleStatic(w http.ResponseWriter, req *http.Request, method *methodConfig, config Config) error {
 	var err error
 
 	typ, err := filetype.MatchFile(method.FullPath)
 
 	if err == nil && len(typ.MIME.Value) != 0 {
 		log.Printf("mime-type detected for %q: %s\n", method.FullPath, typ.MIME.Value)
-		w.Header()["content-type"] = make([]string, 1)
-		w.Header()["content-type"][0] = typ.MIME.Value
+		w.Header()["Content-Type"] = make([]string, 1)
+		w.Header()["Content-Type"][0] = typ.MIME.Value
 	}
 
 	method.ResolveType(config)
@@ -33,5 +33,6 @@ func HandleStatic(w http.ResponseWriter, req *http.Request, method *Method, conf
 		}
 	}
 	http.ServeFile(w, req, method.FullPath)
+
 	return nil
 }

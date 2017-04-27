@@ -15,30 +15,22 @@ import (
 	"io/ioutil"
 )
 
-type DirConfig struct {
+type dirConfig struct {
 	View string
 }
 
-type DirConfigError struct {
-	What string
-}
-
-func (e *DirConfigError) Error() string {
-	return e.What
-}
-
-func (c *DirConfig) CheckDirConfig() error {
+func (c *dirConfig) CheckDirConfig() error {
 	return nil
 }
 
-func MakeDirConfig(config Config) *DirConfig {
-	return &DirConfig{
+func newDirConfig(config Config) *dirConfig {
+	return &dirConfig{
 		View: config.IndexView,
 	}
 }
 
-func ReadDirConfig(path string, config Config) (*DirConfig, error) {
-	conf := MakeDirConfig(config)
+func readDirConfig(path string, config Config) (*dirConfig, error) {
+	conf := newDirConfig(config)
 
 	content, err := ioutil.ReadFile(path)
 	if err != nil {

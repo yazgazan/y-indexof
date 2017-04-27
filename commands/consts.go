@@ -10,25 +10,25 @@
 package commands
 
 const (
-	M_yindexof_help     = "y-indexof is a simple yet modular indexof server"
-	M_version_help      = "Print programm version"
-	M_init_help         = "Init the layout in the current directory"
-	M_init_local_help   = "Use a local init.tar"
-	M_init_git_help     = "Use a git as init folder"
-	M_init_file_help    = "Path to init.tar (for local and download)"
-	M_init_url_help     = "Where to download init.tar from"
-	M_init_branch_help  = "Which branch to checkout (git only)"
-	M_init_dest_help    = "Where to extract init.tar"
-	M_start_help        = "Run the server"
-	M_start_listen_help = "Port to listen (override config port)"
-	M_start_dir_help    = "Directory containing the configurations and files"
+	yindexofHelp    = "y-indexof is a simple yet modular indexof server"
+	versionHelp     = "Print programm version"
+	initHelp        = "Init the layout in the current directory"
+	initLocalHelp   = "Use a local init.tar"
+	initGitHelp     = "Use a git as init folder"
+	initFileHelp    = "Path to init.tar (for local and download)"
+	initURLHelp     = "Where to download init.tar from"
+	initBranchHelp  = "Which branch to checkout (git only)"
+	initDestHelp    = "Where to extract init.tar"
+	startHelp       = "Run the server"
+	startListenHelp = "Port to listen (override config port)"
+	startDirHelp    = "Directory containing the configurations and files"
 
-	M_init_local_default   = false
-	M_init_git_default     = true
-	M_init_file_default    = "/tmp/init.tar"
-	M_init_url_default     = "git@github.com:yazgazan/y-indexof_init.git"
-	M_init_branch_default  = "master"
-	M_init_dest_default    = "."
-	M_start_listen_default = ""
-	M_start_dir_default    = "."
+	initLocalDefault   = false
+	initGitDefault     = true
+	initFileDefault    = "/tmp/init.tar"
+	initURLDefault     = "git@github.com:yazgazan/y-indexof_init.git"
+	initBranchDefault  = "master"
+	initDestDefault    = "."
+	startListenDefault = ""
+	startDirDefault    = "."
 )

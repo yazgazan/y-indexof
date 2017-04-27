@@ -13,22 +13,18 @@ import (
 	"net/http"
 )
 
-func HandleMethod(
-	w http.ResponseWriter,
-	req *http.Request,
-	method *Method,
-	config Config) error {
-	if method.MethodId == Method_Static {
-		return HandleStatic(w, req, method, config)
+func handleMethod(w http.ResponseWriter, req *http.Request, method *methodConfig, config Config) error {
+	if method.MethodID == methodStatic {
+		return handleStatic(w, req, method, config)
 	}
-	if method.MethodId == Method_Internal {
-		return HandleStatic(w, req, method, config)
+	if method.MethodID == methodInternal {
+		return handleStatic(w, req, method, config)
 	}
-	if method.MethodId == Method_Index {
-		return HandleIndex(w, req, method, config)
+	if method.MethodID == methodIndex {
+		return handleIndex(w, req, method, config)
 	}
-	if method.MethodId == Method_CustomView {
-		return HandleIndex(w, req, method, config)
+	if method.MethodID == methodCustomView {
+		return handleIndex(w, req, method, config)
 	}
-	return MakeError(500, "Method not found (should not happen)")
+	return genericError(500, "Method not found (should not happen)")
 }

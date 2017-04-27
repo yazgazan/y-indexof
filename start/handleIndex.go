@@ -10,24 +10,20 @@
 package start
 
 import (
-	"github.com/hoisie/mustache"
-
 	"fmt"
+	"io"
 	"net/http"
+
+	"github.com/hoisie/mustache"
 )
 
-func HandleIndex(
-	w http.ResponseWriter,
-	req *http.Request,
-	method *Method,
-	config Config) error {
-
-	var context IndexContext
+func handleIndex(w io.Writer, req *http.Request, method *methodConfig, config Config) error {
+	var context indexContext
 
 	context.InitSort(req)
 	context.InitContext(method, config)
 	view := method.View
 	res := mustache.RenderFile(view, context)
-	fmt.Fprint(w, res)
-	return nil
+	_, err := fmt.Fprint(w, res)
+	return err
 }

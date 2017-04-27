@@ -28,18 +28,22 @@ func extractFile(path string, mode os.FileMode, fileIn io.Reader) error {
 		return err
 	}
 	_, err = io.Copy(file, fileIn)
-	if err != nil {
-		return err
-	}
-	return nil
+
+	return err
 }
 
-func Extract(filename string, dest string) error {
+func Extract(filename string, dst string) error {
 	file, err := os.Open(filename)
 	if err != nil {
 		return err
 	}
+	defer file.Close()
+
 	tr := tar.NewReader(file)
+	return extractTar(tr, dst)
+}
+
+func extractTar(tr *tar.Reader, dst string) error {
 	for {
 		header, err := tr.Next()
 		if err == io.EOF {
@@ -49,7 +53,7 @@ func Extract(filename string, dest string) error {
 			return err
 		}
 
-		fullPath := path.Join(dest, header.Name)
+		fullPath := path.Join(dst, header.Name)
 		mode := header.FileInfo().Mode()
 
 		fmt.Println("Extracting", header.Name, "...")
@@ -71,9 +75,6 @@ func Extract(filename string, dest string) error {
 			fmt.Println("Report the error (with file type) to yazgazan@gmail.com")
 		}
 	}
-	err = file.Close()
-	if err != nil {
-		panic(err)
-	}
+
 	return nil
 }

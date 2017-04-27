@@ -21,6 +21,7 @@ func DownloadInit(url string, outpath string) error {
 	if err != nil {
 		return err
 	}
+	defer outfile.Close()
 
 	fmt.Println("Downloading tarball from ", url, "...")
 	res, err := http.Get(url)
@@ -29,10 +30,6 @@ func DownloadInit(url string, outpath string) error {
 	}
 
 	_, err = io.Copy(outfile, res.Body)
-	if err != nil {
-		return err
-	}
-	outfile.Close()
 
-	return nil
+	return err
 }

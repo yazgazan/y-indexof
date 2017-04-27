@@ -13,30 +13,30 @@ import (
 	"fmt"
 )
 
-type Error struct {
+type httpError struct {
 	What string
 	Code int
 }
 
-func (e *Error) Error() string {
+func (e *httpError) Error() string {
 	return e.What
 }
 
-func MakeError(code int, msg string) *Error {
-	return &Error{
+func genericError(code int, msg string) *httpError {
+	return &httpError{
 		fmt.Sprintf("Error %d : %s", code, msg),
 		code,
 	}
 }
 
-func MakeError500(msg string) *Error {
-	return MakeError(500, msg)
+func internalError(msg string) *httpError {
+	return genericError(500, msg)
 }
 
-func MakeError404() *Error {
-	return MakeError(404, "File not found")
+func notFoundError() *httpError {
+	return genericError(404, "File not found")
 }
 
-func MakeError403() *Error {
-	return MakeError(404, "Access Forbiden")
+func accessForbiddenError() *httpError {
+	return genericError(403, "Access Forbidden")
 }

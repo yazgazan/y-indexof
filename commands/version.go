@@ -15,6 +15,6 @@ import (
 	"fmt"
 )
 
-func Version(cmd *cobra.Command, args []string) {
+func version(cmd *cobra.Command, args []string) {
 	fmt.Println("y-indexof v0.0.1")
 }
