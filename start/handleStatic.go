@@ -10,27 +10,22 @@
 package start
 
 import (
-	"github.com/rakyll/magicmime"
+	"gopkg.in/h2non/filetype.v0"
+	"log"
 	"net/http"
 )
 
-func HandleStatic(
-	w http.ResponseWriter,
-	req *http.Request,
-	method *Method,
-	config Config) error {
-	err := magicmime.Open(magicmime.MAGIC_MIME_TYPE | magicmime.MAGIC_SYMLINK | magicmime.MAGIC_ERROR)
-	if err != nil {
-		return err
-	}
+func HandleStatic(w http.ResponseWriter, req *http.Request, method *Method, config Config) error {
+	var err error
 
-	mimetype, err := magicmime.TypeByFile(method.FullPath)
-	magicmime.Close()
+	typ, err := filetype.MatchFile(method.FullPath)
 
-	if err == nil && len(mimetype) != 0 {
+	if err == nil && len(typ.MIME.Value) != 0 {
+		log.Printf("mime-type detected for %q: %s\n", method.FullPath, typ.MIME.Value)
 		w.Header()["content-type"] = make([]string, 1)
-		w.Header()["content-type"][0] = mimetype
+		w.Header()["content-type"][0] = typ.MIME.Value
 	}
+
 	method.ResolveType(config)
 	if len(method.Type.Headers) != 0 {
 		for key, values := range method.Type.Headers {
