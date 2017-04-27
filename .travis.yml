@@ -1,6 +1,5 @@
 language: go
 go:
-    - 1.5
     - 1.6
     - 1.7
     - 1.8
@@ -10,6 +9,7 @@ before_install:
     - gometalinter --install --update
 
 script:
+    - go get -u -v
     - go build
     - gometalinter -D gas -D errcheck -e 'should have comment' ./...
 
